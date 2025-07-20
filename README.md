@@ -12,6 +12,8 @@
 ```
 TexWork/
 ├── .gitignore   # Git忽略规则文件，仅跟踪src和pic文件夹
+├── README.md    # 模板简介
+├── LICENSE      # 许可证内容
 ├── pic/         # 存放报告中使用的所有图片
 └── src/         # 存放 LaTeX 源文件 (.tex)
 ```
