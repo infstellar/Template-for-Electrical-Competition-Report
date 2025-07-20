@@ -24,6 +24,12 @@
     citecolor=black,
 }
 
+% --- 页眉页脚设置 ---
+\pagestyle{fancy}                 % 启用 fancy 样式
+\fancyhf{}                        % 清空所有页眉页脚
+\renewcommand{\headrulewidth}{0pt} % 去掉页眉的横线
+\rfoot{\thepage}                  % 在页脚的右侧放置页码
+
 % --- 代码块样式定义 ---
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -80,12 +86,12 @@
     \vspace{3cm}
     
     \begin{tabular}{ll}
-        \bfseries 参赛队号： & \underline{\hspace{5cm}} \\
-        \bfseries 参赛学校： & \underline{\hspace{5cm}} \\
-        \bfseries 参赛队员： & \underline{\hspace{5cm}} \\
-                             & \underline{\hspace{5cm}} \\
-                             & \underline{\hspace{5cm}} \\
-        \bfseries 指导教师： & \underline{\hspace{5cm}} \\
+        \bfseries 参赛队号： & \underline{\makebox[5cm][c]{[在此处填写队号]}} \\
+        \bfseries 参赛学校： & \underline{\makebox[5cm][c]{[在此处填写学校]}} \\
+        \bfseries 参赛队员： & \underline{\makebox[5cm][c]{[队员一]}} \\
+                             & \underline{\makebox[5cm][c]{[队员二]}} \\
+                             & \underline{\makebox[5cm][c]{[队员三]}} \\
+        \bfseries 指导教师： & \underline{\makebox[5cm][c]{[在此处填写教师]}} \\
     \end{tabular}
     
     \vspace{1cm}
@@ -95,7 +101,10 @@
 \end{titlepage}
 
 % --- 摘要 ---
-\begin{abstract}
+% \begin{abstract}
+% 这里由于LaTex的摘要格式会导致“摘要”二字较小，这里选用quote环境来解决
+\section*{摘要}
+\begin{quote}
     \noindent
     % [ 摘要内容模板 ]
     % 第一部分：概述系统。格式：本作品设计并制作了一个基于[核心控制器型号，如TI MSPM0G3507]的[系统名称]。系统采用[总体技术方案，如：XXX结构]，集成了[主要传感器/模块，如：XXX传感器、XXX模块]等，实现了赛题要求的[核心功能，如：自动XXX与XXX]功能。
@@ -106,7 +115,8 @@
     \vspace{1cm}
     \noindent
     \textbf{关键词：} [关键词一]；[关键词二]；[关键词三]；[关键词四] % <-- 修改关键词
-\end{abstract}
+% \end{abstract}
+\end{quote}
 
 \newpage
 \tableofcontents
