@@ -1,5 +1,7 @@
 # 电子设计竞赛 LaTeX 报告模板
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/SandOcean-ovo/Template-for-Electrical-Competition-Report)
+
 ## 简介
 
 这是一个为全国大学生电子设计竞赛（及其他类似科创竞赛）设计的通用 LaTeX 报告模板。
