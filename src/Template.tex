@@ -1,4 +1,4 @@
-\documentclass{ctexart}
+\documentclass[UTF-8,zihao=-4]{ctexart}
 
 % --- 基础宏包 ---
 \usepackage{geometry} % 设置页边距
@@ -12,8 +12,10 @@
 \usepackage{booktabs} % 三线表宏包
 \usepackage{fancyhdr} % 自定义页眉页脚 (可选)
 
+\setCJKmainfont{SimSun}
 % --- 页面设置 ---
-\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=3cm, bottom=2.5cm}
+\setlength{\baselineskip}{22pt} % 设置固定行距为 22pt
 
 % --- 超链接设置 ---
 \hypersetup{
@@ -83,18 +85,8 @@
         \includegraphics[width=0.5\textwidth]{../pic/电赛logo.png}
     \end{figure}
 
-    \vspace{3cm}
-    
-    \begin{tabular}{ll}
-        \bfseries 参赛队号： & \underline{\makebox[5cm][c]{[在此处填写队号]}} \\
-        \bfseries 参赛学校： & \underline{\makebox[5cm][c]{[在此处填写学校]}} \\
-        \bfseries 参赛队员： & \underline{\makebox[5cm][c]{[队员一]}} \\
-                             & \underline{\makebox[5cm][c]{[队员二]}} \\
-                             & \underline{\makebox[5cm][c]{[队员三]}} \\
-        \bfseries 指导教师： & \underline{\makebox[5cm][c]{[在此处填写教师]}} \\
-    \end{tabular}
-    
-    \vspace{1cm}
+    \vspace{6.5cm}
+
     
     {\large \today}
     
@@ -134,7 +126,7 @@
     
 \begin{figure}[H]
 	\centering
-	% \includegraphics[width=0.8\linewidth]{pic/your_block_diagram.png} % <-- 替换为你的系统框图文件
+	% \includegraphics[width=0.8\linewidth]{../pic/your_block_diagram.png} % <-- 替换为你的系统框图文件
 	\caption{系统整体功能框图}
 	\label{fig:system_block}
 \end{figure}
@@ -313,7 +305,6 @@
     \end{tabular}
 \end{table}
 
-\section{参赛队员信息 (可选)}
-% 可以参考范例，放上队员信息、照片和分工等。
+
 
 \end{document}
