@@ -21,8 +21,13 @@
 # Track the LICENSE file
 !/LICENSE
 
-
-
+*.toc
+*.log
+*.aux
+*.out
+*.synctex.gz
+*.pdf
+.history/
 
 
 
