@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简易自行瞄准装置运行原理流程图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 修复：更新到更稳定的Mermaid版本 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            accent: '#8B5CF6',
+            warning: '#F59E0B',
+            danger: '#EF4444',
+            dark: '#1F2937',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .flowchart-container {
+        background-color: #f8fafc;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      .section-title {
+        @apply text-2xl font-bold text-dark mb-4 border-b-2 border-primary pb-2 inline-block;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+  <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- 页面标题 -->
+    <header class="mb-10 text-center">
+      <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-3">简易自行瞄准装置运行原理流程图</h1>
+      <div class="w-32 h-1 bg-primary mx-auto rounded-full"></div>
+    </header>
+    
+    <!-- 系统概述 -->
+    <section class="mb-10 bg-white rounded-xl shadow-md p-6">
+      <h2 class="section-title">系统概述</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-primary">系统组成</h3>
+          <ul class="space-y-2 pl-5">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>自动寻迹小车（MSPM0系列MCU控制，含寻迹、电机控制）</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>瞄准模块（二维云台控制蓝紫激光笔发射方向）</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>目标靶（A4幅面紫外感光纸，显示光斑痕迹）</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-primary">主要功能</h3>
+          <ul class="space-y-2 pl-5">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>沿100cm×100cm正方形轨迹自动寻迹行驶</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>行驶圈数N可在1-5之间设定，时间需<20s</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>瞄准模块控制激光光点落在目标靶心上，偏差≤2cm</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 运行原理流程图 -->
+    <section class="mb-10">
+      <h2 class="section-title">运行原理流程图</h2>
+      <div class="flowchart-container p-4 md:p-6">
+        <!-- 修复：简化Mermaid流程图结构，改为横向布局 -->
+        <div class="mermaid">
+          flowchart LR
+            A[系统上电初始化] --> B{自检通过?}
+            B -->|否| Z[系统报警]
+            B -->|是| C[设置行驶圈数N]
+            
+            C --> D[开始寻迹行驶]
+            C --> E[启动瞄准模块]
+            
+            D --> F[检测轨迹边界]
+            F --> G{偏离轨迹?}
+            G -->|是| H[电机差速调整]
+            G -->|否| I[保持直行]
+            H --> J[计算行驶距离]
+            I --> J
+            
+            J --> K{完成N圈?}
+            K -->|否| F
+            K -->|是| L[停止行驶]
+            
+            E --> M[云台初始化]
+            M --> N[开启激光笔]
+            N --> O{光斑在靶心?}
+            O -->|否| P[调整云台角度]
+            O -->|是| Q[保持瞄准]
+            P --> O
+            Q --> O
+            
+            L --> R[关闭激光笔]
+            R --> S[任务完成]
+            
+            classDef startEnd fill:#4ade80,stroke:#166534,stroke-width:2px,color:#000
+            classDef process fill:#93c5fd,stroke:#1e40af,stroke-width:2px,color:#000
+            classDef decision fill:#facc15,stroke:#854d0e,stroke-width:2px,color:#000
+            classDef error fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#fff
+            
+            class A,S startEnd
+            class C,D,E,F,H,I,J,L,M,N,P,Q,R process
+            class B,G,K,O decision
+            class Z error
+        </div>
+      </div>
+    </section>
+    
+    <!-- 关键控制流程 -->
+    <section class="mb-10 bg-white rounded-xl shadow-md p-6">
+      <h2 class="section-title">关键控制流程详解</h2>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-blue-50 rounded-lg p-5 border-l-4 border-primary">
+          <h3 class="text-xl font-semibold mb-3 text-primary flex items-center">
+            <i class="fa fa-car mr-2"></i>自动寻迹控制
+          </h3>
+          <ol class="space-y-2 pl-5">
+            <li class="flex items-start">
+              <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">1</span>
+              <span>通过边界传感器实时检测轨迹边界</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">2</span>
+              <span>根据检测结果调整左右电机转速实现差速转向</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">3</span>
+              <span>到达拐角位置时执行预设转弯程序</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">4</span>
+              <span>累计行驶距离，计算已完成圈数</span>
+            </li>
+          </ol>
+        </div>
+        
+        <div class="bg-purple-50 rounded-lg p-5 border-l-4 border-accent">
+          <h3 class="text-xl font-semibold mb-3 text-accent flex items-center">
+            <i class="fa fa-crosshairs mr-2"></i>瞄准控制流程
+          </h3>
+          <ol class="space-y-2 pl-5">
+            <li class="flex items-start">
+              <span class="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">1</span>
+              <span>二维云台初始化到预设初始角度</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">2</span>
+              <span>开启蓝紫激光笔，投射光斑到靶面</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">3</span>
+              <span>实时检测光斑位置与靶心偏差</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2 mt-0.5 flex-shrink-0">4</span>
+              <span>通过PID算法调整二维云台X/Y轴角度</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 性能指标与评估 -->
+    <section class="mb-10 bg-white rounded-xl shadow-md p-6">
+      <h2 class="section-title">性能指标与评估</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-primary">关键性能指标</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">行驶时间</span>
+                <span class="text-danger font-medium">&lt;20秒/圈</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-danger h-2.5 rounded-full" style="width: 40%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">瞄准精度</span>
+                <span class="text-secondary font-medium">≤2cm</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-secondary h-2.5 rounded-full" style="width: 90%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">行驶圈数</span>
+                <span class="text-primary font-medium">1-5圈可设定</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-primary h-2.5 rounded-full" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-primary">评估方法</h3>
+          <ul class="space-y-2 pl-5">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>行驶时间：使用秒表记录完成N圈行驶的总时间</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>瞄准精度：测量光斑痕迹中心与靶心的直线距离Di</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>同步性：检查行驶1圈时光斑是否同步完成1圈</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>稳定性：连续运行多次，检查性能一致性</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 总结 -->
+    <section class="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-6">
+      <h2 class="section-title">系统工作流程总结</h2>
+      <p class="mb-4">简易自行瞄准装置通过MSPM0控制器实现小车的自动寻迹行驶和瞄准模块的精确控制。系统上电初始化后，小车沿预设轨迹自动行驶，同时瞄准模块控制激光笔保持对靶心的瞄准。整个过程中，系统实时监测行驶状态和光斑位置，通过闭环控制确保小车按预定轨迹行驶并保持激光光斑在靶心附近，最终完成设定圈数的行驶任务。</p>
+      <div class="text-center">
+        <span class="inline-block bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
+          核心：自动寻迹控制 + 瞄准闭环控制
+        </span>
+      </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="mt-12 text-center text-gray-600 text-sm">
+      <p>简易自行瞄准装置运行原理流程图 &copy; 2025</p>
+    </footer>
+  </div>
+  
+  <!-- 修复：更新Mermaid初始化配置 -->
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'arial, sans-serif'
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: 'linear',
+        useMaxWidth: true,
+        wrappingWidth: 200
+      },
+      securityLevel: 'loose'
+    });
+  </script>
+</body>
+</html>
